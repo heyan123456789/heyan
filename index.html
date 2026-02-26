@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>论文修改器 | 网页版</title>
-  <meta name="description" content="支持字体、边距、字号调整的网页版论文修改器，可导入并导出 Word 文档。" />
+  <meta name="description" content="支持字体、边距、字号调整的网页版论文修改器，可导入并导出 Word 文档，并内置论文排版规范。 " />
   <style>
     :root{
       --bg: #f7f8fb;
@@ -16,6 +16,12 @@
       --primary-dark: #1d4ed8;
       --shadow: 0 12px 40px rgba(15, 23, 42, 0.12);
       --radius: 14px;
+      --a4-width: 210mm;
+      --a4-height: 297mm;
+      --margin-top: 2.54cm;
+      --margin-bottom: 2.54cm;
+      --margin-left: 2.7cm;
+      --margin-right: 2cm;
     }
     *{ box-sizing: border-box; }
     body{
@@ -119,16 +125,70 @@
       overflow: hidden;
     }
     .page{
-      min-height: 700px;
+      width: var(--a4-width);
+      min-height: var(--a4-height);
       background: #fff;
-      margin: 18px;
+      margin: 18px auto 28px;
       border: 1px solid #e2e8f0;
       border-radius: 12px;
       box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
-      padding: 48px;
-      font-size: 14px;
-      line-height: 1.8;
+      padding: var(--margin-top) var(--margin-right) var(--margin-bottom) var(--margin-left);
+      font-size: 12pt;
+      line-height: 25pt;
       outline: none;
+      position: relative;
+    }
+    .page-header,
+    .page-footer{
+      position: absolute;
+      left: var(--margin-left);
+      right: var(--margin-right);
+      font-family: "宋体", "SimSun", "Times New Roman", serif;
+      font-size: 10.5pt;
+      text-align: center;
+      color: #111827;
+    }
+    .page-header{
+      top: 1cm;
+    }
+    .page-footer{
+      bottom: 0.9cm;
+    }
+    .page-content{
+      margin-top: 1.6cm;
+      min-height: calc(var(--a4-height) - 6cm);
+    }
+    .page-content p{
+      margin: 0;
+      font-family: "宋体", "SimSun", "Times New Roman", serif;
+      font-size: 12pt;
+      line-height: 25pt;
+    }
+    .page-content h1{
+      font-size: 16pt;
+      font-family: "黑体", "SimHei", "Times New Roman", serif;
+      margin: 0 0 8pt;
+    }
+    .page-content h2{
+      font-size: 14pt;
+      font-family: "黑体", "SimHei", "Times New Roman", serif;
+      margin: 0 0 6pt;
+    }
+    .page-content h3{
+      font-size: 14pt;
+      font-family: "宋体", "SimSun", "Times New Roman", serif;
+      margin: 0 0 6pt;
+    }
+    .page-content .caption-table,
+    .page-content .caption-figure{
+      font-size: 10.5pt;
+      font-family: "黑体", "SimHei", "Times New Roman", serif;
+      margin: 6pt 0;
+      text-align: center;
+    }
+    .page-content .references{
+      font-family: "宋体", "SimSun", "Times New Roman", serif;
+      font-size: 12pt;
     }
     .status{
       margin-top: 12px;
@@ -146,14 +206,14 @@
     }
     @media (max-width: 560px){
       .controls{ grid-template-columns: 1fr; }
-      .page{ margin: 12px; padding: 32px; }
+      .page{ margin: 12px; width: auto; padding: 32px; }
     }
   </style>
 </head>
 <body>
   <header>
     <h1>网页版论文修改器</h1>
-    <p>支持字体、字号、边距调整，导入 Word 文档并一键导出。</p>
+    <p>支持字体、字号、边距调整，导入 Word 文档并一键导出，内置规范排版模式。</p>
   </header>
 
   <div class="container">
@@ -164,39 +224,54 @@
           <label for="fontFamily">字体</label>
           <select id="fontFamily">
             <option value="'Times New Roman', serif">Times New Roman</option>
-            <option value="'宋体', 'SimSun', serif">宋体</option>
+            <option value="'宋体', 'SimSun', 'Times New Roman', serif">宋体</option>
             <option value="'仿宋', 'FangSong', serif">仿宋</option>
             <option value="'微软雅黑', 'Microsoft YaHei', sans-serif">微软雅黑</option>
             <option value="'Calibri', sans-serif">Calibri</option>
           </select>
         </div>
         <div class="control">
-          <label for="fontSize">字号（px）</label>
-          <input id="fontSize" type="range" min="10" max="26" value="14" />
+          <label for="fontSize">字号（pt）</label>
+          <input id="fontSize" type="range" min="10" max="18" step="0.5" value="12" />
         </div>
         <div class="control">
-          <label for="marginSize">页面边距（px）</label>
-          <input id="marginSize" type="range" min="20" max="90" value="48" />
+          <label for="marginSize">左右边距（cm）</label>
+          <input id="marginSize" type="range" min="2" max="3" step="0.1" value="2.7" />
         </div>
         <div class="control">
-          <label for="lineHeight">行距</label>
-          <input id="lineHeight" type="range" min="1.2" max="2.5" step="0.1" value="1.8" />
+          <label for="lineHeight">行距（pt）</label>
+          <input id="lineHeight" type="range" min="20" max="30" step="1" value="25" />
         </div>
       </div>
       <div class="button-row">
         <label class="btn secondary" for="docxInput">导入 Word (.docx)</label>
         <input id="docxInput" type="file" accept=".docx" hidden />
         <button id="exportBtn" class="btn">导出 Word</button>
+        <button id="applySpecBtn" class="btn secondary">一键应用规范</button>
         <button id="resetBtn" class="btn secondary">恢复默认样式</button>
+        <label class="control" style="flex-direction: row; align-items: center; gap: 6px;">
+          <input id="lockSpec" type="checkbox" checked />
+          <span>锁定规范模式</span>
+        </label>
       </div>
       <div class="status" id="status">准备就绪。</div>
     </section>
 
     <section class="editor-shell">
-      <div id="editor" class="page" contenteditable="true" aria-label="论文内容编辑区">
-        <h2>论文标题示例</h2>
-        <p>请在此处输入或粘贴你的论文内容。你可以通过上方控制栏调整字体、字号与边距，系统会实时更新排版效果。</p>
-        <p>如需导入 Word 文档，请点击“导入 Word”按钮选择 .docx 文件。完成修改后，点击“导出 Word”即可下载。</p>
+      <div id="editor" class="page" aria-label="论文内容编辑区">
+        <div class="page-header">中国药科大学 高等教育自学考试本科毕业论文（设计）</div>
+        <div class="page-content" contenteditable="true">
+          <h1>论文一级标题示例（黑体 16pt）</h1>
+          <h2>二级标题示例（黑体 14pt）</h2>
+          <h3>三级标题示例（宋体 14pt）</h3>
+          <p>摘要：摘要、关键词与正文请使用小四号（12pt）宋体中文 + Times New Roman 英文，行距固定值 25 磅。</p>
+          <p>关键词：论文排版；格式规范；示例内容。</p>
+          <p>正文示例段落。段前段后均为 0 行。导入 Word 文档后可继续调整并保持规范格式。</p>
+          <p class="caption-table">表 1 示例表题（五号字，黑体）</p>
+          <p class="caption-figure">图 1 示例图题（五号字，黑体）</p>
+          <p class="references">参考文献：参考文献条目使用小四号宋体、Times New Roman。</p>
+        </div>
+        <div class="page-footer">第 1 页</div>
       </div>
     </section>
   </div>
@@ -214,12 +289,55 @@
     const lineHeight = document.getElementById('lineHeight');
     const statusEl = document.getElementById('status');
     const docxInput = document.getElementById('docxInput');
+    const lockSpec = document.getElementById('lockSpec');
+    const pageHeader = document.querySelector('.page-header');
+    const pageFooter = document.querySelector('.page-footer');
+    const pageContent = document.querySelector('.page-content');
+
+    const specDefaults = {
+      fontFamily: "'宋体', 'SimSun', 'Times New Roman', serif",
+      fontSize: 12,
+      lineHeight: 25,
+      marginTop: '2.54cm',
+      marginBottom: '2.54cm',
+      marginLeft: '2.7cm',
+      marginRight: '2cm',
+      headerText: '中国药科大学 高等教育自学考试本科毕业论文（设计）',
+      footerText: '第 1 页',
+    };
+
+    const updateControlLock = () => {
+      const isLocked = lockSpec.checked;
+      fontFamily.disabled = isLocked;
+      fontSize.disabled = isLocked;
+      marginSize.disabled = isLocked;
+      lineHeight.disabled = isLocked;
+    };
 
     const updateStyles = () => {
+      if (lockSpec.checked) {
+        editor.style.setProperty('--margin-top', specDefaults.marginTop);
+        editor.style.setProperty('--margin-bottom', specDefaults.marginBottom);
+        editor.style.setProperty('--margin-left', specDefaults.marginLeft);
+        editor.style.setProperty('--margin-right', specDefaults.marginRight);
+        editor.style.fontFamily = specDefaults.fontFamily;
+        editor.style.fontSize = `${specDefaults.fontSize}pt`;
+        editor.style.lineHeight = `${specDefaults.lineHeight}pt`;
+        pageHeader.textContent = specDefaults.headerText;
+        pageFooter.textContent = specDefaults.footerText;
+        fontFamily.value = specDefaults.fontFamily;
+        fontSize.value = specDefaults.fontSize;
+        lineHeight.value = specDefaults.lineHeight;
+        marginSize.value = 2.7;
+        updateControlLock();
+        return;
+      }
       editor.style.fontFamily = fontFamily.value;
-      editor.style.fontSize = `${fontSize.value}px`;
-      editor.style.padding = `${marginSize.value}px`;
-      editor.style.lineHeight = lineHeight.value;
+      editor.style.fontSize = `${fontSize.value}pt`;
+      editor.style.lineHeight = `${lineHeight.value}pt`;
+      editor.style.setProperty('--margin-left', `${marginSize.value}cm`);
+      editor.style.setProperty('--margin-right', `${Math.max(1.5, marginSize.value - 0.7).toFixed(1)}cm`);
+      updateControlLock();
     };
 
     const setStatus = (text, isError = false) => {
@@ -232,13 +350,27 @@
     marginSize.addEventListener('input', updateStyles);
     lineHeight.addEventListener('input', updateStyles);
 
+    const applySpec = () => {
+      lockSpec.checked = true;
+      updateStyles();
+      setStatus('已应用论文排版规范。');
+    };
+
+    document.getElementById('applySpecBtn').addEventListener('click', applySpec);
+
     document.getElementById('resetBtn').addEventListener('click', () => {
+      lockSpec.checked = false;
       fontFamily.value = "'Times New Roman', serif";
-      fontSize.value = 14;
-      marginSize.value = 48;
-      lineHeight.value = 1.8;
+      fontSize.value = 12;
+      marginSize.value = 2.7;
+      lineHeight.value = 25;
       updateStyles();
       setStatus('已恢复默认样式。');
+    });
+
+    lockSpec.addEventListener('change', () => {
+      updateStyles();
+      setStatus(lockSpec.checked ? '规范模式已锁定。' : '已切换为自定义模式。');
     });
 
     docxInput.addEventListener('change', async (event) => {
@@ -254,7 +386,7 @@
       try {
         const arrayBuffer = await file.arrayBuffer();
         const result = await mammoth.convertToHtml({ arrayBuffer });
-        editor.innerHTML = result.value || '<p>文档为空。</p>';
+        pageContent.innerHTML = result.value || '<p>文档为空。</p>';
         updateStyles();
         setStatus('导入成功，可以开始编辑。');
       } catch (error) {
@@ -266,17 +398,17 @@
     document.getElementById('exportBtn').addEventListener('click', () => {
       const styleBlock = `
         <style>
-          body { font-family: ${fontFamily.value}; font-size: ${fontSize.value}px; line-height: ${lineHeight.value}; }
-          .page { padding: ${marginSize.value}px; }
+          body { font-family: ${lockSpec.checked ? specDefaults.fontFamily : fontFamily.value}; font-size: ${lockSpec.checked ? specDefaults.fontSize : fontSize.value}pt; line-height: ${lockSpec.checked ? specDefaults.lineHeight : lineHeight.value}pt; }
+          .page { padding: ${lockSpec.checked ? specDefaults.marginTop : `${marginSize.value}cm`} ${lockSpec.checked ? specDefaults.marginRight : `${Math.max(1.5, marginSize.value - 0.7).toFixed(1)}cm`} ${lockSpec.checked ? specDefaults.marginBottom : `${marginSize.value}cm`} ${lockSpec.checked ? specDefaults.marginLeft : `${marginSize.value}cm`}; }
         </style>
       `;
-      const html = `<!doctype html><html><head><meta charset="utf-8">${styleBlock}</head><body>${editor.innerHTML}</body></html>`;
+      const html = `<!doctype html><html><head><meta charset="utf-8">${styleBlock}</head><body>${pageContent.innerHTML}</body></html>`;
       const docxBlob = window.htmlDocx.asBlob(html);
       saveAs(docxBlob, '论文修改.docx');
       setStatus('已导出 Word 文档。');
     });
 
-    updateStyles();
+    applySpec();
   </script>
 </body>
 </html>
