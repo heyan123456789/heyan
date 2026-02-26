@@ -3,325 +3,412 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>个人简介 | 贺老师</title>
-  <meta name="description" content="个人简介页面：关于我、核心能力与关键数据指标。" />
+  <title>论文修改器 | 网页版</title>
+  <meta name="description" content="支持字体、边距、字号调整的网页版论文修改器，可导入并导出 Word 文档，并内置论文排版规范。 " />
   <style>
     :root{
-      --bg: #ffffff;
-      --muted: #6b7280;
+      --bg: #f7f8fb;
+      --surface: #ffffff;
       --text: #111827;
-      --line: #e5e7eb;
-      --card: #f5f7fb;
-      --primary: #1e63ff;
-      --primary-dark: #174fe0;
-      --shadow: 0 18px 50px rgba(17, 24, 39, 0.12);
-      --radius: 18px;
-      --max: 1120px;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --primary: #2563eb;
+      --primary-dark: #1d4ed8;
+      --shadow: 0 12px 40px rgba(15, 23, 42, 0.12);
+      --radius: 14px;
+      --a4-width: 210mm;
+      --a4-height: 297mm;
+      --margin-top: 2.54cm;
+      --margin-bottom: 2.54cm;
+      --margin-left: 2.7cm;
+      --margin-right: 2cm;
     }
     *{ box-sizing: border-box; }
-    html,body{ height:100%; }
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "PingFang SC",
-                   "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans CJK SC", Arial, sans-serif;
-      color: var(--text);
+      font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
       background: var(--bg);
-    }
-    a{ color: inherit; }
-    .wrap{
-      max-width: var(--max);
-      margin: 0 auto;
-      padding: 36px 20px 24px;
-    }
-
-    /* 顶部主体区 */
-    .hero{
-      position: relative;
-      display: grid;
-      grid-template-columns: 480px 1fr;
-      gap: 44px;
-      align-items: center;
-      padding: 10px 0 26px;
-    }
-
-    /* 左侧竖排标签（My Short Story 的感觉） */
-    .side-tag{
-      position: absolute;
-      left: -48px;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 10px;
-      color: #111827;
-      user-select: none;
-    }
-    .side-tag .line{
-      width: 1px;
-      height: 160px;
-      background: #111827;
-      opacity: .75;
-    }
-    .side-tag .dot{
-      width: 6px;
-      height: 6px;
-      border-radius: 999px;
-      background: #111827;
-      opacity: .75;
-    }
-    .side-tag .text{
-      writing-mode: vertical-rl;
-      transform: rotate(180deg);
-      font-size: 12px;
-      letter-spacing: .14em;
-      opacity: .85;
-    }
-
-    /* 左侧照片 + 蓝色有机形状背景 */
-    .portrait{
-      position: relative;
-      width: 100%;
-      min-height: 520px;
-      border-radius: 28px;
-      overflow: visible;
-      display: grid;
-      place-items: center;
-    }
-    .blob{
-      position: absolute;
-      inset: 22px 40px 22px 18px;
-      border-radius: 46% 54% 55% 45% / 44% 42% 58% 56%;
-      background: radial-gradient(120% 120% at 20% 20%, #3b82f6 0%, #1d4ed8 45%, #1e3a8a 100%);
-      filter: saturate(1.05);
-      opacity: .92;
-      z-index: 0;
-    }
-    .photo-frame{
-      position: relative;
-      z-index: 1;
-      width: min(320px, 72%);
-      aspect-ratio: 3 / 4;
-      border-radius: 22px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-      transform: translateY(6px);
-      background: #0b1220;
-    }
-    .photo-frame img{
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-
-    /* 右侧文本 */
-    .about small{
-      display: inline-block;
-      font-size: 12px;
-      letter-spacing: .12em;
-      color: var(--muted);
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-    .about h1{
-      margin: 0 0 14px;
-      font-size: 40px;
-      line-height: 1.15;
-      letter-spacing: -0.02em;
-    }
-    .about h1 .wave{
-      display:inline-block;
-      transform: translateY(-2px);
-      font-size: 0.86em;
-    }
-    .about p{
-      margin: 0 0 10px;
-      color: #374151;
-      line-height: 1.85;
-      font-size: 15px;
-      max-width: 62ch;
-    }
-    .cta{
-      margin-top: 18px;
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-    .btn{
-      appearance: none;
-      border: 1px solid transparent;
-      background: var(--primary);
-      color: white;
-      padding: 12px 18px;
-      border-radius: 10px;
-      font-weight: 600;
-      font-size: 14px;
-      cursor: pointer;
-      text-decoration: none;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      transition: .18s ease;
-      box-shadow: 0 10px 24px rgba(30, 99, 255, 0.22);
-    }
-    .btn:hover{ background: var(--primary-dark); transform: translateY(-1px); }
-    .btn:active{ transform: translateY(0); }
-    .btn.secondary{
-      background: transparent;
       color: var(--text);
-      border-color: #d1d5db;
-      box-shadow: none;
     }
-    .btn.secondary:hover{
-      background: #f3f4f6;
-      transform: translateY(-1px);
-    }
-
-    /* 分隔线 */
-    .divider{
-      margin: 18px 0 0;
-      border: 0;
-      border-top: 1px solid var(--line);
-      opacity: .9;
-    }
-
-    /* 底部指标区 */
-    .stats{
-      margin-top: 18px;
-      background: var(--card);
-      border-radius: 14px;
-      padding: 22px 18px;
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      align-items: stretch;
-    }
-    .stat{
-      padding: 10px 12px;
+    header{
+      background: linear-gradient(135deg, #2563eb 0%, #4f46e5 100%);
+      color: #fff;
+      padding: 28px 20px 34px;
       text-align: center;
     }
-    .stat .label{
-      font-size: 11px;
-      letter-spacing: .08em;
-      color: var(--muted);
-      text-transform: uppercase;
-      margin-bottom: 8px;
+    header h1{
+      margin: 0 0 8px;
+      font-size: 28px;
+      letter-spacing: .04em;
     }
-    .stat .value{
-      font-size: 44px;
-      font-weight: 800;
-      letter-spacing: -0.03em;
-      color: #0b1220;
-      line-height: 1;
+    header p{
+      margin: 0;
+      opacity: .9;
+      font-size: 14px;
     }
-    .stat .hint{
-      margin-top: 8px;
+    .container{
+      max-width: 1100px;
+      margin: -24px auto 40px;
+      padding: 0 20px;
+      display: grid;
+      gap: 18px;
+    }
+    .panel{
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px 18px 10px;
+      border: 1px solid var(--border);
+    }
+    .panel h2{
+      margin: 0 0 12px;
+      font-size: 16px;
+      color: #0f172a;
+    }
+    .controls{
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .control{
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
       font-size: 12px;
-      color: #6b7280;
+      color: var(--muted);
     }
-
-    /* 页脚小装饰（右下角菱形） */
-    .sparkle{
+    .control label{
+      font-weight: 600;
+      color: #1f2937;
+    }
+    select, input[type="range"], input[type="number"]{
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 14px;
+      background: #fff;
+    }
+    .button-row{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 8px;
+    }
+    .btn{
+      border: none;
+      background: var(--primary);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: .2s ease;
+    }
+    .btn:hover{ background: var(--primary-dark); }
+    .btn.secondary{
+      background: #f3f4f6;
+      color: #111827;
+      border: 1px solid var(--border);
+    }
+    .btn.secondary:hover{ background: #e5e7eb; }
+    .editor-shell{
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      padding: 0;
+      overflow: hidden;
+    }
+    .page{
+      width: var(--a4-width);
+      min-height: var(--a4-height);
+      background: #fff;
+      margin: 18px auto 28px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.08);
+      padding: var(--margin-top) var(--margin-right) var(--margin-bottom) var(--margin-left);
+      font-size: 12pt;
+      line-height: 25pt;
+      outline: none;
+      position: relative;
+    }
+    .page-header,
+    .page-footer{
       position: absolute;
-      right: 16px;
-      bottom: 12px;
-      width: 10px;
-      height: 10px;
-      background: #9ca3af;
-      transform: rotate(45deg);
-      opacity: .55;
-      border-radius: 2px;
+      left: var(--margin-left);
+      right: var(--margin-right);
+      font-family: "宋体", "SimSun", "Times New Roman", serif;
+      font-size: 10.5pt;
+      text-align: center;
+      color: #111827;
     }
-
-    /* 响应式 */
-    @media (max-width: 980px){
-      .hero{
-        grid-template-columns: 1fr;
-        gap: 26px;
-      }
-      .side-tag{ display:none; }
-      .portrait{ min-height: 460px; }
-      .blob{ inset: 18px 22px 18px 10px; }
-      .about h1{ font-size: 34px; }
-      .stats{ grid-template-columns: repeat(2, 1fr); }
+    .page-header{
+      top: 1cm;
     }
-    @media (max-width: 520px){
-      .wrap{ padding: 26px 16px 18px; }
-      .about h1{ font-size: 30px; }
-      .stat .value{ font-size: 38px; }
+    .page-footer{
+      bottom: 0.9cm;
+    }
+    .page-content{
+      margin-top: 1.6cm;
+      min-height: calc(var(--a4-height) - 6cm);
+    }
+    .page-content p{
+      margin: 0;
+      font-family: "宋体", "SimSun", "Times New Roman", serif;
+      font-size: 12pt;
+      line-height: 25pt;
+    }
+    .page-content h1{
+      font-size: 16pt;
+      font-family: "黑体", "SimHei", "Times New Roman", serif;
+      margin: 0 0 8pt;
+    }
+    .page-content h2{
+      font-size: 14pt;
+      font-family: "黑体", "SimHei", "Times New Roman", serif;
+      margin: 0 0 6pt;
+    }
+    .page-content h3{
+      font-size: 14pt;
+      font-family: "宋体", "SimSun", "Times New Roman", serif;
+      margin: 0 0 6pt;
+    }
+    .page-content .caption-table,
+    .page-content .caption-figure{
+      font-size: 10.5pt;
+      font-family: "黑体", "SimHei", "Times New Roman", serif;
+      margin: 6pt 0;
+      text-align: center;
+    }
+    .page-content .references{
+      font-family: "宋体", "SimSun", "Times New Roman", serif;
+      font-size: 12pt;
+    }
+    .status{
+      margin-top: 12px;
+      font-size: 12px;
+      color: var(--muted);
+    }
+    footer{
+      text-align: center;
+      font-size: 12px;
+      color: var(--muted);
+      padding-bottom: 26px;
+    }
+    @media (max-width: 960px){
+      .controls{ grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 560px){
+      .controls{ grid-template-columns: 1fr; }
+      .page{ margin: 12px; width: auto; padding: 32px; }
     }
   </style>
 </head>
-
 <body>
-  <main class="wrap">
-    <section class="hero" aria-label="个人简介">
-      <div class="side-tag" aria-hidden="true">
-        <span class="dot"></span>
-        <span class="line"></span>
-        <span class="text">My Short Story</span>
-        <span class="line"></span>
-        <span class="dot"></span>
-      </div>
+  <header>
+    <h1>网页版论文修改器</h1>
+    <p>支持字体、字号、边距调整，导入 Word 文档并一键导出，内置规范排版模式。</p>
+  </header>
 
-      <div class="portrait">
-       
-        <!-- 把 heyan.jpg 放到同目录；也可以改成你的文件名 -->
-        <figure class="photo-frame" aria-label="个人照片">
-          <img src="heyan.jpg" alt="个人照片" />
-        </figure>
-      </div>
-
-      <div class="about">
-        <small>About Me</small>
-        <h1>你好，我是贺老师 <span class="wave">👋</span></h1>
-
-        <p>
-          我长期从事信息安全与风险治理相关工作，关注安全体系建设、数据安全与个人信息保护、等保合规与攻防演练等方向，
-          目标是在业务连续性与合规要求之间建立可落地、可审计、可持续优化的安全能力。
-        </p>
-        <p>
-          我倾向于用结构化的方法推进工作：明确边界与责任、用证据闭环关键风险、用指标衡量投入产出，并通过制度与技术协同降低长期成本。
-        </p>
-
-        <div class="cta">
-          <a class="btn" href="mailto:yourname@example.com?subject=联系咨询&body=你好，想和你沟通一下……">
-            Get In Touch
-            <span aria-hidden="true">→</span>
-          </a>
-          <a class="btn secondary" href="#stats">查看关键数据</a>
+  <div class="container">
+    <section class="panel">
+      <h2>排版设置</h2>
+      <div class="controls">
+        <div class="control">
+          <label for="fontFamily">字体</label>
+          <select id="fontFamily">
+            <option value="'Times New Roman', serif">Times New Roman</option>
+            <option value="'宋体', 'SimSun', 'Times New Roman', serif">宋体</option>
+            <option value="'仿宋', 'FangSong', serif">仿宋</option>
+            <option value="'微软雅黑', 'Microsoft YaHei', sans-serif">微软雅黑</option>
+            <option value="'Calibri', sans-serif">Calibri</option>
+          </select>
+        </div>
+        <div class="control">
+          <label for="fontSize">字号（pt）</label>
+          <input id="fontSize" type="range" min="10" max="18" step="0.5" value="12" />
+        </div>
+        <div class="control">
+          <label for="marginSize">左右边距（cm）</label>
+          <input id="marginSize" type="range" min="2" max="3" step="0.1" value="2.7" />
+        </div>
+        <div class="control">
+          <label for="lineHeight">行距（pt）</label>
+          <input id="lineHeight" type="range" min="20" max="30" step="1" value="25" />
         </div>
       </div>
-
-      <span class="sparkle" aria-hidden="true"></span>
+      <div class="button-row">
+        <label class="btn secondary" for="docxInput">导入 Word (.docx)</label>
+        <input id="docxInput" type="file" accept=".docx" hidden />
+        <button id="exportBtn" class="btn">导出 Word</button>
+        <button id="applySpecBtn" class="btn secondary">一键应用规范</button>
+        <button id="resetBtn" class="btn secondary">恢复默认样式</button>
+        <label class="control" style="flex-direction: row; align-items: center; gap: 6px;">
+          <input id="lockSpec" type="checkbox" checked />
+          <span>锁定规范模式</span>
+        </label>
+      </div>
+      <div class="status" id="status">准备就绪。</div>
     </section>
 
-    <hr class="divider" />
-
-    <section id="stats" class="stats" aria-label="关键数据指标">
-      <div class="stat">
-        <div class="label">Year of Experience</div>
-        <div class="value">18+</div>
-        <div class="hint">信息安全从业年限</div>
-      </div>
-      <div class="stat">
-        <div class="label">Projects Delivered</div>
-        <div class="value">30+</div>
-        <div class="hint">主导/参与项目</div>
-      </div>
-      <div class="stat">
-        <div class="label">Domains Covered</div>
-        <div class="value">5+</div>
-        <div class="hint">覆盖领域方向</div>
-      </div>
-      <div class="stat">
-        <div class="label">Teams / Stakeholders</div>
-        <div class="value">50+</div>
-        <div class="hint">协同团队/干系人</div>
+    <section class="editor-shell">
+      <div id="editor" class="page" aria-label="论文内容编辑区">
+        <div class="page-header">中国药科大学 高等教育自学考试本科毕业论文（设计）</div>
+        <div class="page-content" contenteditable="true">
+          <h1>论文一级标题示例（黑体 16pt）</h1>
+          <h2>二级标题示例（黑体 14pt）</h2>
+          <h3>三级标题示例（宋体 14pt）</h3>
+          <p>摘要：摘要、关键词与正文请使用小四号（12pt）宋体中文 + Times New Roman 英文，行距固定值 25 磅。</p>
+          <p>关键词：论文排版；格式规范；示例内容。</p>
+          <p>正文示例段落。段前段后均为 0 行。导入 Word 文档后可继续调整并保持规范格式。</p>
+          <p class="caption-table">表 1 示例表题（五号字，黑体）</p>
+          <p class="caption-figure">图 1 示例图题（五号字，黑体）</p>
+          <p class="references">参考文献：参考文献条目使用小四号宋体、Times New Roman。</p>
+        </div>
+        <div class="page-footer">第 1 页</div>
       </div>
     </section>
-  </main>
+  </div>
+
+  <footer>提示：导入功能依赖浏览器读取本地文件，请确保文件为 .docx 格式。</footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.4.21/mammoth.browser.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html-docx-js/0.4.1/html-docx.min.js" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js" crossorigin="anonymous"></script>
+  <script>
+    const editor = document.getElementById('editor');
+    const fontFamily = document.getElementById('fontFamily');
+    const fontSize = document.getElementById('fontSize');
+    const marginSize = document.getElementById('marginSize');
+    const lineHeight = document.getElementById('lineHeight');
+    const statusEl = document.getElementById('status');
+    const docxInput = document.getElementById('docxInput');
+    const lockSpec = document.getElementById('lockSpec');
+    const pageHeader = document.querySelector('.page-header');
+    const pageFooter = document.querySelector('.page-footer');
+    const pageContent = document.querySelector('.page-content');
+
+    const specDefaults = {
+      fontFamily: "'宋体', 'SimSun', 'Times New Roman', serif",
+      fontSize: 12,
+      lineHeight: 25,
+      marginTop: '2.54cm',
+      marginBottom: '2.54cm',
+      marginLeft: '2.7cm',
+      marginRight: '2cm',
+      headerText: '中国药科大学 高等教育自学考试本科毕业论文（设计）',
+      footerText: '第 1 页',
+    };
+
+    const updateControlLock = () => {
+      const isLocked = lockSpec.checked;
+      fontFamily.disabled = isLocked;
+      fontSize.disabled = isLocked;
+      marginSize.disabled = isLocked;
+      lineHeight.disabled = isLocked;
+    };
+
+    const updateStyles = () => {
+      if (lockSpec.checked) {
+        editor.style.setProperty('--margin-top', specDefaults.marginTop);
+        editor.style.setProperty('--margin-bottom', specDefaults.marginBottom);
+        editor.style.setProperty('--margin-left', specDefaults.marginLeft);
+        editor.style.setProperty('--margin-right', specDefaults.marginRight);
+        editor.style.fontFamily = specDefaults.fontFamily;
+        editor.style.fontSize = `${specDefaults.fontSize}pt`;
+        editor.style.lineHeight = `${specDefaults.lineHeight}pt`;
+        pageHeader.textContent = specDefaults.headerText;
+        pageFooter.textContent = specDefaults.footerText;
+        fontFamily.value = specDefaults.fontFamily;
+        fontSize.value = specDefaults.fontSize;
+        lineHeight.value = specDefaults.lineHeight;
+        marginSize.value = 2.7;
+        updateControlLock();
+        return;
+      }
+      editor.style.fontFamily = fontFamily.value;
+      editor.style.fontSize = `${fontSize.value}pt`;
+      editor.style.lineHeight = `${lineHeight.value}pt`;
+      editor.style.setProperty('--margin-left', `${marginSize.value}cm`);
+      editor.style.setProperty('--margin-right', `${Math.max(1.5, marginSize.value - 0.7).toFixed(1)}cm`);
+      updateControlLock();
+    };
+
+    const setStatus = (text, isError = false) => {
+      statusEl.textContent = text;
+      statusEl.style.color = isError ? '#dc2626' : '#6b7280';
+    };
+
+    fontFamily.addEventListener('change', updateStyles);
+    fontSize.addEventListener('input', updateStyles);
+    marginSize.addEventListener('input', updateStyles);
+    lineHeight.addEventListener('input', updateStyles);
+
+    const applySpec = () => {
+      lockSpec.checked = true;
+      updateStyles();
+      setStatus('已应用论文排版规范。');
+    };
+
+    document.getElementById('applySpecBtn').addEventListener('click', applySpec);
+
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      lockSpec.checked = false;
+      fontFamily.value = "'Times New Roman', serif";
+      fontSize.value = 12;
+      marginSize.value = 2.7;
+      lineHeight.value = 25;
+      updateStyles();
+      setStatus('已恢复默认样式。');
+    });
+
+    lockSpec.addEventListener('change', () => {
+      updateStyles();
+      setStatus(lockSpec.checked ? '规范模式已锁定。' : '已切换为自定义模式。');
+    });
+
+    docxInput.addEventListener('change', async (event) => {
+      const file = event.target.files[0];
+      if (!file) {
+        return;
+      }
+      if (!file.name.endsWith('.docx')) {
+        setStatus('请选择 .docx 文件。', true);
+        return;
+      }
+      setStatus('正在导入文档，请稍候...');
+      try {
+        const arrayBuffer = await file.arrayBuffer();
+        const result = await mammoth.convertToHtml({ arrayBuffer });
+        pageContent.innerHTML = result.value || '<p>文档为空。</p>';
+        updateStyles();
+        setStatus('导入成功，可以开始编辑。');
+      } catch (error) {
+        console.error(error);
+        setStatus('导入失败，请检查文档格式。', true);
+      }
+    });
+
+    document.getElementById('exportBtn').addEventListener('click', () => {
+      const styleBlock = `
+        <style>
+          body { font-family: ${lockSpec.checked ? specDefaults.fontFamily : fontFamily.value}; font-size: ${lockSpec.checked ? specDefaults.fontSize : fontSize.value}pt; line-height: ${lockSpec.checked ? specDefaults.lineHeight : lineHeight.value}pt; }
+          .page { padding: ${lockSpec.checked ? specDefaults.marginTop : `${marginSize.value}cm`} ${lockSpec.checked ? specDefaults.marginRight : `${Math.max(1.5, marginSize.value - 0.7).toFixed(1)}cm`} ${lockSpec.checked ? specDefaults.marginBottom : `${marginSize.value}cm`} ${lockSpec.checked ? specDefaults.marginLeft : `${marginSize.value}cm`}; }
+        </style>
+      `;
+      const html = `<!doctype html><html><head><meta charset="utf-8">${styleBlock}</head><body>${pageContent.innerHTML}</body></html>`;
+      const docxBlob = window.htmlDocx.asBlob(html);
+      saveAs(docxBlob, '论文修改.docx');
+      setStatus('已导出 Word 文档。');
+    });
+
+    applySpec();
+  </script>
 </body>
 </html>
